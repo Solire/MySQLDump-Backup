@@ -1,0 +1,17 @@
+{
+    "name": "solire/MySQLDump-Backup",
+    "type": "library",
+    "description": "MySQLDump-Backup",
+    "keywords": ["mysqldump", "backup", "dump"],
+    "license": "LGPL-3.0",
+    "authors": [
+    ],
+    "require": {
+        "php": ">4.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "PH7\\SQL\\Backup": ""
+        }
+    }
+}
