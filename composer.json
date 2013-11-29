@@ -1,5 +1,5 @@
 {
-    "name": "solire/MySQLDump-Backup",
+    "name": "solire/mysqldump-backup",
     "type": "library",
     "description": "MySQLDump-Backup",
     "keywords": ["mysqldump", "backup", "dump"],
