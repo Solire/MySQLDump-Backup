@@ -40,6 +40,14 @@ class MySQL
      * @var string $_sCmd
      */
     private $_sCmd;
+    
+    /**
+     * The backup name file.
+     *
+     * @access private
+     * @var string $_sFileName
+     */
+    private $_sFileName;
 
     /**
      * The extension allowed.
@@ -65,10 +73,10 @@ class MySQL
     {
         $bZip = (array_key_exists($sZip, $this->_aZipExt)) ? true : false;
         $sExt = ($bZip) ? '.' . $sZip : '';
-        $sFileName = 'Periodic-database-update.' . date('Y-m-d') . '.sql' . $sExt;
+        $this->_sFileName = 'Periodic-database-update.' . date('Y-m-d') . '.sql' . $sExt;
         $sOptions = ($bZip) ? ' | ' . $this->_aZipExt[$sZip] : '';
 
-        $this->_sCmd = 'mysqldump -h' . $sDbHost . ' -u' . $sDbUser . ' -p' . $sDbPass . ' ' . $sDbName . $sOptions . ' > ' . $sDest . $sFileName;
+        $this->_sCmd = 'mysqldump -h' . $sDbHost . ' -u' . $sDbUser . ' -p' . $sDbPass . ' ' . $sDbName . $sOptions . ' > ' . $sDest . $this->_sFileName;
     }
 
     /**
@@ -85,5 +93,16 @@ class MySQL
             trigger_error('Backup failed: Command = ' . $this->_sCmd . ' Error = ' . $sError);
         }
     }
+    
+    /**
+     * Return current name of backup file.
+     * 
+     * @return string
+     */
+    public function get_sFileName() {
+        return $this->_sFileName;
+    }
+
+
 
 }
