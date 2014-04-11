@@ -88,7 +88,7 @@ class MySQL
     public function backup()
     {
         $sError = '';
-        system($this->_sCmd, $sError);
+        exec($this->_sCmd, $aOutput, $sError);
         if ($sError) {
             trigger_error('Backup failed: Command = ' . $this->_sCmd . ' Error = ' . $sError);
         }
