@@ -55,7 +55,7 @@ class MySQL
      * @access private
      * @var array $_aZipExt
      */
-    private $_aZipExt = array('gz' => 'gzip', 'bz2' => 'bzip2');
+    static private $_aZipExt = array('gz' => 'gzip', 'bz2' => 'bzip2');
 
     /**
      * MySQLDump constructor.
@@ -71,10 +71,10 @@ class MySQL
      */
     public function __construct($sDbHost, $sDbUser, $sDbPass, $sDbName, $sDest, $sZip = 'gz')
     {
-        $bZip = (array_key_exists($sZip, $this->_aZipExt)) ? true : false;
+        $bZip = (array_key_exists($sZip, self::$_aZipExt)) ? true : false;
         $sExt = ($bZip) ? '.' . $sZip : '';
         $this->_sFileName = 'Periodic-database-update.' . date('Y-m-d') . '.sql' . $sExt;
-        $sOptions = ($bZip) ? ' | ' . $this->_aZipExt[$sZip] : '';
+        $sOptions = ($bZip) ? ' | ' . self::$_aZipExt[$sZip] : '';
 
         $this->_sCmd = 'mysqldump -h' . $sDbHost . ' -u' . $sDbUser . ' -p' . $sDbPass . ' ' . $sDbName . $sOptions . ' > ' . $sDest . $this->_sFileName;
     }
@@ -89,11 +89,33 @@ class MySQL
     {
         $sError = '';
         exec($this->_sCmd, $aOutput, $sError);
-        if ($sError) {
-            trigger_error('Backup failed: Command = ' . $this->_sCmd . ' Error = ' . $sError);
-        }
+        return $sError == 0;
     }
     
+    /**
+     * Check if mysqldump is installed
+     * 
+     * @return boolean
+     */
+    static function mysqldumpIsInstalled()
+    {
+        // Test Mysqldump
+        exec("which mysqldump", $aOutput, $sError);
+        return $sError == 0;
+    }
+    
+    /**
+     * Check if command for compression is installed
+     * 
+     * @return boolean
+     */
+    static public function zipIsInstalled($sZip = 'gz')
+    {
+        // Test Mysqldump
+        exec("which " . self::$_aZipExt[$sZip], $aOutput, $sError);
+        return $sError == 0;
+    }
+
     /**
      * Return current name of backup file.
      * 
